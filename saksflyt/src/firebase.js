@@ -1,5 +1,5 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // Disse verdiene kobler nettsiden til prosjektet mitt i Firebase.
 const firebaseConfig = {
@@ -9,7 +9,7 @@ const firebaseConfig = {
   storageBucket: "saksflyt-75921.firebasestorage.app",
   messagingSenderId: "100234400524",
   appId: "1:100234400524:web:516507ef54407823a4af29",
-  measurementId: "G-7F944653C5"
+  measurementId: "G-7F944653C5",
 };
 
 const app = initializeApp(firebaseConfig);

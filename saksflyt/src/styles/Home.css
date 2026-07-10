@@ -344,6 +344,12 @@ tbody tr:hover { background: #f7faff; }
 .history small { margin-top: 4px; color: #8994a4; }
 .activity-button { display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; margin-top: 28px; padding: 11px; border: 1px solid #dbe2eb; border-radius: 8px; background: white; color: #25334b; font-weight: 600; }
 .activity-button svg { width: 17px; }
+.assign-button { display: flex; align-items: center; gap: 7px; margin-top: 10px; padding: 9px 12px; border: 1px solid var(--blue); border-radius: 7px; background: var(--light-blue); color: var(--blue); }
+.assign-button svg { width: 17px; }
+.status-label { display: block; margin-bottom: 7px; font-size: 12px; font-weight: bold; }
+#case-status { width: 100%; padding: 10px; border: 1px solid #dbe2eb; border-radius: 7px; background: white; }
+.delete-case-button { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; margin-top: 12px; padding: 10px; border: 1px solid #f2c4c4; border-radius: 8px; background: #fff5f5; color: #c94747; }
+.delete-case-button svg { width: 17px; }
 
 @media (max-width: 1050px) {
   .content { padding: 28px 24px; }
