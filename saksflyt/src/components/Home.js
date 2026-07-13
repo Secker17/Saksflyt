@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getCases, saveCases } from "../caseStorage";
+import { deleteCase, updateCase, watchCases } from "../caseService";
+import { useTeam } from "../TeamContext";
 import Sidebar from "./dashboard/Sidebar";
 import Overview from "./dashboard/Overview";
 import CaseTable from "./dashboard/CaseTable";
@@ -15,7 +16,8 @@ const categories = [
 ];
 
 function Home({ user }) {
-  const [cases, setCases] = useState(getCases);
+  const { activeTeam } = useTeam();
+  const [cases, setCases] = useState([]);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("Alle");
   const [category, setCategory] = useState("Alle");
@@ -23,14 +25,20 @@ function Home({ user }) {
   const [selectedCase, setSelectedCase] = useState(null);
 
   useEffect(() => {
-    saveCases(cases);
-  }, [cases]);
+    if (!activeTeam) {
+      return;
+    }
+
+    setSelectedCase(null);
+    return watchCases(activeTeam.id, setCases);
+  }, [activeTeam]);
 
   // Lager en ny liste basert på søk og valgte filtre.
   const filteredCases = cases.filter((item) => {
     const title = item.title.toLowerCase();
     const searchText = search.toLowerCase();
-    const textMatches = title.includes(searchText) || item.id.includes(search);
+    const textMatches =
+      title.includes(searchText) || item.caseNumber.includes(search);
 
     const statusMatches = status === "Alle" || item.status === status;
     const categoryMatches = category === "Alle" || item.category === category;
@@ -39,18 +47,14 @@ function Home({ user }) {
     return textMatches && statusMatches && categoryMatches && priorityMatches;
   });
 
-  function updateCase(updatedCase) {
-    const updatedCases = cases.map((item) => {
-      return item.id === updatedCase.id ? updatedCase : item;
-    });
-
-    setCases(updatedCases);
+  async function saveCase(updatedCase) {
+    const { id, ...changes } = updatedCase;
+    await updateCase(activeTeam.id, id, changes);
     setSelectedCase(updatedCase);
   }
 
-  function deleteCase(id) {
-    const remainingCases = cases.filter((item) => item.id !== id);
-    setCases(remainingCases);
+  async function removeCase(id) {
+    await deleteCase(activeTeam.id, id);
     setSelectedCase(null);
   }
 
@@ -90,8 +94,8 @@ function Home({ user }) {
           <CaseDetails
             item={selectedCase}
             userEmail={user.email}
-            onUpdate={updateCase}
-            onDelete={deleteCase}
+            onUpdate={saveCase}
+            onDelete={removeCase}
             onClose={() => setSelectedCase(null)}
           />
         )}

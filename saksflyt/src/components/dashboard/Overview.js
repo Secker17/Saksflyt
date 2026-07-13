@@ -7,6 +7,7 @@ import {
   Search,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTeam } from "../../TeamContext";
 
 function Overview({
   cases,
@@ -20,6 +21,7 @@ function Overview({
   setPriority,
   categories,
 }) {
+  const { activeTeam } = useTeam();
   const newCases = countCases(cases, "Ny");
   const activeCases = countCases(cases, "Under arbeid");
   const finishedCases = countCases(cases, "Ferdig");
@@ -77,7 +79,10 @@ function Overview({
           options={["Alle", "Høy", "Middels", "Lav"]}
         />
 
-        <Link className="new-case-button" to="/new-case">
+        <Link
+          className="new-case-button"
+          to={`/new-case?team=${activeTeam.id}`}
+        >
           <CirclePlus /> Ny sak
         </Link>
       </section>

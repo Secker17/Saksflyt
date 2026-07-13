@@ -1,10 +1,17 @@
 import { CheckCircle2, Clock3, FileText } from "lucide-react";
+import { useEffect, useState } from "react";
 import Sidebar from "./dashboard/Sidebar";
-import { getCases } from "../caseStorage";
+import { watchCases } from "../caseService";
+import { useTeam } from "../TeamContext";
 import "../styles/Reports.css";
 
 function Reports({ user }) {
-  const cases = getCases();
+  const { activeTeam } = useTeam();
+  const [cases, setCases] = useState([]);
+
+  useEffect(() => {
+    return watchCases(activeTeam.id, setCases);
+  }, [activeTeam]);
   const active = cases.filter((item) => item.status === "Under arbeid").length;
   const finished = cases.filter((item) => item.status === "Ferdig").length;
 
@@ -52,7 +59,7 @@ function Reports({ user }) {
               <span>
                 <strong>{item.title}</strong>
                 <small>
-                  {item.id} · {item.category}
+                  {item.caseNumber} · {item.category}
                 </small>
               </span>
               <span

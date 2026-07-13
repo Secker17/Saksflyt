@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowLeft, CheckCircle2, Send } from "lucide-react";
-import { Link } from "react-router-dom";
-import { getCases, saveCases } from "../caseStorage";
+import { Link, useSearchParams } from "react-router-dom";
+import { createCase } from "../caseService";
 import "../styles/NewCase.css";
 
 const categories = [
@@ -13,6 +13,8 @@ const categories = [
 ];
 
 function NewCase() {
+  const [searchParams] = useSearchParams();
+  const teamId = searchParams.get("team");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [title, setTitle] = useState("");
@@ -21,16 +23,14 @@ function NewCase() {
   const [sent, setSent] = useState(false);
   const [caseId, setCaseId] = useState("");
 
-  function submitCase(event) {
+  async function submitCase(event) {
     event.preventDefault();
-
-    const savedCases = getCases();
     const year = new Date().getFullYear();
-    const number = String(savedCases.length + 1).padStart(4, "0");
+    const number = String(Date.now()).slice(-6);
     const id = `${year}-${number}`;
 
     const newCase = {
-      id,
+      caseNumber: id,
       title,
       category,
       priority: "Middels",
@@ -44,7 +44,7 @@ function NewCase() {
       date: new Date().toLocaleDateString("no-NO"),
     };
 
-    saveCases([newCase, ...savedCases]);
+    await createCase(teamId, newCase);
     setCaseId(id);
     setSent(true);
   }
@@ -59,6 +59,18 @@ function NewCase() {
             Saksnummeret ditt er <strong>{caseId}</strong>.
           </p>
           <button onClick={() => setSent(false)}>Send inn en ny sak</button>
+        </section>
+      </main>
+    );
+  }
+
+  if (!teamId) {
+    return (
+      <main className="public-case-page">
+        <section className="case-success">
+          <h1>Mangler team</h1>
+          <p>Bruk lenken du har fått fra teamet.</p>
+          <Link to="/login">Gå til innlogging</Link>
         </section>
       </main>
     );

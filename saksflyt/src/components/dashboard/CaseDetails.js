@@ -28,7 +28,7 @@ function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
   return (
     <aside className="case-details">
       <div className="details-heading">
-        <h2>Sak {item.id}</h2>
+        <h2>Sak {item.caseNumber}</h2>
         <button onClick={onClose} aria-label="Lukk detaljer">
           <X />
         </button>

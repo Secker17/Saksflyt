@@ -1,7 +1,9 @@
 import { CirclePlus, Folder, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTeam } from "../../TeamContext";
 
 function CaseTable({ cases, hasCases, selectedCase, onSelect }) {
+  const { activeTeam } = useTeam();
   return (
     <section className="table-card" id="case-table">
       <table>
@@ -24,7 +26,7 @@ function CaseTable({ cases, hasCases, selectedCase, onSelect }) {
               className={selectedCase?.id === item.id ? "selected-row" : ""}
               onClick={() => onSelect(item)}
             >
-              <td>{item.id}</td>
+              <td>{item.caseNumber}</td>
               <td className="case-title">{item.title}</td>
               <td>{item.category}</td>
               <td>
@@ -68,7 +70,7 @@ function CaseTable({ cases, hasCases, selectedCase, onSelect }) {
               : "Opprett den første saken for å komme i gang."}
           </p>
           {!hasCases && (
-            <Link to="/new-case">
+            <Link to={`/new-case?team=${activeTeam.id}`}>
               <CirclePlus /> Opprett sak
             </Link>
           )}

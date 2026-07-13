@@ -99,6 +99,10 @@
   color: white;
   font-weight: bold;
 }
+
+.case-success a {
+  color: var(--blue);
+}
 .public-case-form button svg {
   width: 18px;
 }

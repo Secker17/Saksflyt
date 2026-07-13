@@ -22,6 +22,46 @@
   object-position: left center;
 }
 
+.team-picker {
+  margin: 18px 3px 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #f8faff;
+}
+
+.team-picker label,
+.team-picker small {
+  display: block;
+  color: #718096;
+  font-size: 10px;
+}
+
+.team-picker select {
+  width: 100%;
+  margin: 5px 0 8px;
+  border: 0;
+  background: transparent;
+  color: var(--navy);
+  font-weight: bold;
+}
+
+.team-picker > div {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.team-picker button {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #d7e1ef;
+  border-radius: 6px;
+  background: white;
+  color: var(--blue);
+  font-size: 9px;
+}
+
 .main-nav {
   display: grid;
   gap: 7px;

@@ -33,8 +33,16 @@ function Login() {
     try {
       // Åpner Google-vinduet og logger brukeren inn gjennom Firebase.
       await signInWithPopup(auth, googleProvider);
-    } catch {
-      setError("Google-innlogging ble avbrutt eller feilet.");
+    } catch (firebaseError) {
+      console.error(firebaseError.code, firebaseError.message);
+
+      if (firebaseError.code === "auth/unauthorized-domain") {
+        setError("Dette domenet er ikke godkjent i Firebase.");
+      } else if (firebaseError.code === "auth/popup-closed-by-user") {
+        setError("Google-vinduet ble lukket før innloggingen var ferdig.");
+      } else {
+        setError("Google-innlogging feilet. Prøv igjen.");
+      }
     }
   }
 

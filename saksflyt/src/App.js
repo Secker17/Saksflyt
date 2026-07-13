@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Reports from "./components/Reports";
 import NewCase from "./components/NewCase";
+import { TeamProvider } from "./TeamContext";
 import "./styles/App.css";
 
 function App() {
@@ -30,26 +31,31 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={user ? <Home user={user} /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/cases"
-          element={user ? <Home user={user} /> : <Navigate to="/login" />}
-        />
-        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-        <Route
-          path="/signup"
-          element={user ? <Navigate to="/" /> : <Signup />}
-        />
-        <Route
-          path="/reports"
-          element={user ? <Reports user={user} /> : <Navigate to="/login" />}
-        />
-        <Route path="/new-case" element={<NewCase />} />
-      </Routes>
+      <TeamProvider user={user}>
+        <Routes>
+          <Route
+            path="/"
+            element={user ? <Home user={user} /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/cases"
+            element={user ? <Home user={user} /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/login"
+            element={user ? <Navigate to="/" /> : <Login />}
+          />
+          <Route
+            path="/signup"
+            element={user ? <Navigate to="/" /> : <Signup />}
+          />
+          <Route
+            path="/reports"
+            element={user ? <Reports user={user} /> : <Navigate to="/login" />}
+          />
+          <Route path="/new-case" element={<NewCase />} />
+        </Routes>
+      </TeamProvider>
     </BrowserRouter>
   );
 }
