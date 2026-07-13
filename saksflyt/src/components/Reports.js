@@ -1,28 +1,16 @@
 import { CheckCircle2, Clock3, FileText } from "lucide-react";
-import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
 import Sidebar from "./dashboard/Sidebar";
+import { getCases } from "../caseStorage";
 import "../styles/Reports.css";
 
 function Reports({ user }) {
-  const navigate = useNavigate();
-  const savedCases = localStorage.getItem("cases");
-  const cases = savedCases ? JSON.parse(savedCases) : [];
+  const cases = getCases();
   const active = cases.filter((item) => item.status === "Under arbeid").length;
   const finished = cases.filter((item) => item.status === "Ferdig").length;
 
   return (
     <div className="dashboard">
-      <Sidebar
-        email={user.email}
-        onOverview={() => navigate("/")}
-        onCases={() => navigate("/")}
-        onNewCase={() => navigate("/")}
-        onReport={() => {}}
-        onSettings={() => navigate("/")}
-        onLogout={() => signOut(auth)}
-      />
+      <Sidebar email={user.email} />
       <main className="reports-content">
         <header className="reports-header">
           <div>

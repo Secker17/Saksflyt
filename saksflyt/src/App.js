@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Reports from "./components/Reports";
+import NewCase from "./components/NewCase";
 import "./styles/App.css";
 
 function App() {
@@ -34,6 +35,10 @@ function App() {
           path="/"
           element={user ? <Home user={user} /> : <Navigate to="/login" />}
         />
+        <Route
+          path="/cases"
+          element={user ? <Home user={user} /> : <Navigate to="/login" />}
+        />
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route
           path="/signup"
@@ -43,6 +48,7 @@ function App() {
           path="/reports"
           element={user ? <Reports user={user} /> : <Navigate to="/login" />}
         />
+        <Route path="/new-case" element={<NewCase />} />
       </Routes>
     </BrowserRouter>
   );

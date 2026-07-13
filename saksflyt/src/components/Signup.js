@@ -29,7 +29,7 @@ function Signup() {
   return (
     <main className="auth-page">
       <section className="auth-card">
-        <img className="auth-logo" src="/logo.png" alt="Saksflyt" />
+        <img className="auth-logo" src="/Logo.png" alt="Saksflyt" />
         <h1>Opprett bruker</h1>
         <p className="auth-intro">Fyll inn e-post og velg et passord.</p>
 

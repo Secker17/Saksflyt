@@ -12,7 +12,11 @@
   padding: 50px 65px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 15% 15%, rgba(120, 217, 145, 0.24), transparent 32%),
+    radial-gradient(
+      circle at 15% 15%,
+      rgba(120, 217, 145, 0.24),
+      transparent 32%
+    ),
     linear-gradient(145deg, #0b2d66 0%, #115dde 54%, #477de0 100%);
   color: white;
 }
@@ -38,62 +42,11 @@
   object-fit: contain;
 }
 
-.visual-content {
-  position: absolute;
-  z-index: 2;
-  top: 50%;
-  left: 65px;
-  max-width: 510px;
-  transform: translateY(-48%);
-}
-
-.visual-label,
 .welcome-label {
-  color: #9de8b0;
+  color: var(--blue);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 2px;
-}
-
-.visual-content h1 {
-  margin: 17px 0;
-  font-size: clamp(45px, 5vw, 72px);
-  line-height: 1.03;
-  letter-spacing: -3px;
-}
-
-.visual-content > p {
-  max-width: 470px;
-  color: rgba(255, 255, 255, 0.76);
-  font-size: 16px;
-  line-height: 1.7;
-}
-
-.visual-points {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 20px;
-  margin-top: 32px;
-}
-
-.visual-points span {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 13px;
-}
-
-.visual-points svg {
-  width: 18px;
-  color: #9de8b0;
-}
-
-.visual-footer {
-  position: absolute;
-  bottom: 32px;
-  left: 65px;
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 12px;
 }
 
 .visual-circle {
@@ -132,10 +85,6 @@
 
 .mobile-logo {
   display: none;
-}
-
-.welcome-label {
-  color: var(--blue);
 }
 
 .login-form-card h2 {

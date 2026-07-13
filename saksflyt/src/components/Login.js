@@ -61,14 +61,13 @@ function Login() {
         <div className="visual-circle circle-one"></div>
         <div className="visual-circle circle-two"></div>
 
-        <img className="login-logo" src="/logo.png" alt="Saksflyt" />
-
+        <img className="login-logo" src="/Logo.png" alt="Saksflyt" />
       </section>
 
       <section className="login-form-side">
         <div className="login-form-card">
           <div className="mobile-logo">
-            <img src="/logo.png" alt="Saksflyt" />
+            <img src="/Logo.png" alt="Saksflyt" />
           </div>
 
           <span className="welcome-label">VELKOMMEN TILBAKE</span>
@@ -77,61 +76,61 @@ function Login() {
             Skriv inn opplysningene dine for å fortsette.
           </p>
 
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="email">E-post</label>
-          <div className="login-input">
-            <Mail />
-            <input
-              id="email"
-              type="email"
-              placeholder="navn@eksempel.no"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="email">E-post</label>
+            <div className="login-input">
+              <Mail />
+              <input
+                id="email"
+                type="email"
+                placeholder="navn@eksempel.no"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+              />
+            </div>
 
-          <div className="password-heading">
-            <label htmlFor="password">Passord</label>
-            <button type="button" onClick={handleForgotPassword}>
-              Glemt passord?
+            <div className="password-heading">
+              <label htmlFor="password">Passord</label>
+              <button type="button" onClick={handleForgotPassword}>
+                Glemt passord?
+              </button>
+            </div>
+            <div className="login-input">
+              <LockKeyhole />
+              <input
+                id="password"
+                type="password"
+                placeholder="Skriv inn passord"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                required
+              />
+            </div>
+
+            {error && <p className="error">{error}</p>}
+            {message && <p className="login-message">{message}</p>}
+
+            <button className="login-submit" type="submit">
+              Logg inn <ArrowRight />
             </button>
-          </div>
-          <div className="login-input">
-            <LockKeyhole />
-            <input
-              id="password"
-              type="password"
-              placeholder="Skriv inn passord"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
-          </div>
+          </form>
 
-          {error && <p className="error">{error}</p>}
-          {message && <p className="login-message">{message}</p>}
-
-          <button className="login-submit" type="submit">
-            Logg inn <ArrowRight />
+          <div className="login-divider">
+            <span>eller</span>
+          </div>
+          <button
+            className="google-button"
+            type="button"
+            onClick={handleGoogleLogin}
+          >
+            <span className="google-letter">G</span>
+            Logg inn med Google
           </button>
-        </form>
 
-        <div className="login-divider">
-          <span>eller</span>
-        </div>
-        <button
-          className="google-button"
-          type="button"
-          onClick={handleGoogleLogin}
-        >
-          <span className="google-letter">G</span>
-          Logg inn med Google
-        </button>
-
-        <p className="login-signup-link">
-          Har du ikke bruker? <Link to="/signup">Opprett bruker</Link>
-        </p>
+          <p className="login-signup-link">
+            Har du ikke bruker? <Link to="/signup">Opprett bruker</Link>
+          </p>
         </div>
       </section>
     </main>

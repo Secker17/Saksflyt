@@ -29,7 +29,9 @@ function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
     <aside className="case-details">
       <div className="details-heading">
         <h2>Sak {item.id}</h2>
-        <button onClick={onClose} aria-label="Lukk detaljer"><X /></button>
+        <button onClick={onClose} aria-label="Lukk detaljer">
+          <X />
+        </button>
       </div>
 
       <div className="details-badges">
@@ -65,7 +67,9 @@ function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
       </section>
 
       <section className="detail-section">
-        <label className="status-label" htmlFor="case-status">Status</label>
+        <label className="status-label" htmlFor="case-status">
+          Status
+        </label>
         <select id="case-status" value={item.status} onChange={changeStatus}>
           <option>Ny</option>
           <option>Under arbeid</option>
@@ -85,12 +89,19 @@ function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
         <div className="activity-overlay">
           <div className="activity-header">
             <h3>Aktiviteter</h3>
-            <button onClick={() => setShowActivity(false)}><X /></button>
+            <button onClick={() => setShowActivity(false)}>
+              <X />
+            </button>
           </div>
           <p>Saken ble opprettet {item.date}.</p>
           <p>Ansvarlig: {item.person}.</p>
           <p>Status: {item.status}.</p>
-          <button className="save-button activity-close" onClick={() => setShowActivity(false)}>Lukk</button>
+          <button
+            className="activity-close"
+            onClick={() => setShowActivity(false)}
+          >
+            Lukk
+          </button>
         </div>
       )}
     </aside>

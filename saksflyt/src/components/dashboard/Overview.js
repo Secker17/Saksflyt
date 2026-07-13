@@ -6,6 +6,7 @@ import {
   FileText,
   Search,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function Overview({
   cases,
@@ -18,7 +19,6 @@ function Overview({
   priority,
   setPriority,
   categories,
-  onNewCase,
 }) {
   const newCases = countCases(cases, "Ny");
   const activeCases = countCases(cases, "Under arbeid");
@@ -77,9 +77,9 @@ function Overview({
           options={["Alle", "Høy", "Middels", "Lav"]}
         />
 
-        <button className="new-case-button" onClick={onNewCase}>
+        <Link className="new-case-button" to="/new-case">
           <CirclePlus /> Ny sak
-        </button>
+        </Link>
       </section>
     </>
   );

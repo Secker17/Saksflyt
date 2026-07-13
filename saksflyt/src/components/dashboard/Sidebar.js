@@ -1,53 +1,47 @@
-import {
-  BarChart3,
-  CirclePlus,
-  Home,
-  LogOut,
-  FileLock2,
-  Settings,
-} from "lucide-react";
+import { BarChart3, CirclePlus, FileLock2, Home, LogOut } from "lucide-react";
+import { signOut } from "firebase/auth";
+import { NavLink } from "react-router-dom";
+import { auth } from "../../firebase";
 
-function Sidebar({
-  email,
-  onOverview,
-  onCases,
-  onNewCase,
-  onReport,
-  onSettings,
-  onLogout,
-}) {
+function Sidebar({ email }) {
+  function logout() {
+    signOut(auth);
+  }
+
   return (
     <aside className="sidebar">
-      <img className="logo" src="/logo.png" alt="Saksflyt" />
+      <img className="logo" src="/Logo.png" alt="Saksflyt" />
 
       <nav className="main-nav">
-        <button className="nav-item active" onClick={onOverview}>
+        <NavLink className="nav-item" to="/" end>
           <Home /> Oversikt
-        </button>
-        <button className="nav-item" onClick={onCases}>
+        </NavLink>
+
+        <NavLink className="nav-item" to="/cases">
           <FileLock2 /> Saker
-        </button>
-        <button className="nav-item" onClick={onNewCase}>
+        </NavLink>
+
+        <NavLink className="nav-item" to="/new-case">
           <CirclePlus /> Ny sak
-        </button>
-        <button className="nav-item" onClick={onReport}>
+        </NavLink>
+
+        <NavLink className="nav-item" to="/reports">
           <BarChart3 /> Rapporter
-        </button>
+        </NavLink>
       </nav>
 
       <div className="sidebar-bottom">
-        <button className="nav-item" onClick={onSettings}>
-          <Settings /> Innstillinger
-        </button>
         <div className="sidebar-user">
           <span className="sidebar-avatar">
             {email.slice(0, 2).toUpperCase()}
           </span>
+
           <span>
             <strong>{email.split("@")[0]}</strong>
             <small>Saksbehandler</small>
           </span>
-          <button title="Logg ut" onClick={onLogout}>
+
+          <button title="Logg ut" onClick={logout}>
             <LogOut />
           </button>
         </div>

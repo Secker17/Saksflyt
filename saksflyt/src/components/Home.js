@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
+import { getCases, saveCases } from "../caseStorage";
 import Sidebar from "./dashboard/Sidebar";
 import Overview from "./dashboard/Overview";
 import CaseTable from "./dashboard/CaseTable";
-import NewCaseModal from "./dashboard/NewCaseModal";
-import SettingsModal from "./dashboard/SettingsModal";
 import CaseDetails from "./dashboard/CaseDetails";
 import "../styles/Home.css";
 
@@ -19,20 +15,15 @@ const categories = [
 ];
 
 function Home({ user }) {
-  const navigate = useNavigate();
-  // Saker og verdier fra søkefeltene lagres i state.
-  const savedCases = JSON.parse(localStorage.getItem("cases")) || [];
-  const [cases, setCases] = useState(savedCases);
+  const [cases, setCases] = useState(getCases);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("Alle");
   const [category, setCategory] = useState("Alle");
   const [priority, setPriority] = useState("Alle");
-  const [showNewCase, setShowNewCase] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const [selectedCase, setSelectedCase] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("cases", JSON.stringify(cases));
+    saveCases(cases);
   }, [cases]);
 
   // Lager en ny liste basert på søk og valgte filtre.
@@ -47,29 +38,6 @@ function Home({ user }) {
 
     return textMatches && statusMatches && categoryMatches && priorityMatches;
   });
-
-  function addCase(formData) {
-    const year = new Date().getFullYear();
-    const caseNumber = String(cases.length + 1).padStart(4, "0");
-    const newCase = {
-      id: `${year}-${caseNumber}`,
-      title: formData.title,
-      category: formData.category,
-      priority: formData.priority,
-      description: formData.description,
-      dueDate: formData.dueDate,
-      customerName: formData.customerName,
-      customerEmail: formData.customerEmail,
-      status: "Ny",
-      person: "Ikke tildelt",
-      initials: "--",
-      date: new Date().toLocaleDateString("no-NO"),
-    };
-
-    setCases([newCase, ...cases]);
-    setSelectedCase(newCase);
-    setShowNewCase(false);
-  }
 
   function updateCase(updatedCase) {
     const updatedCases = cases.map((item) => {
@@ -86,36 +54,9 @@ function Home({ user }) {
     setSelectedCase(null);
   }
 
-  function resetFilters() {
-    setSearch("");
-    setStatus("Alle");
-    setCategory("Alle");
-    setPriority("Alle");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function scrollToCases() {
-    document
-      .getElementById("case-table")
-      ?.scrollIntoView({ behavior: "smooth" });
-  }
-
-  function handleLogout() {
-    // signOut kommer fra Firebase og logger ut brukeren.
-    signOut(auth);
-  }
-
   return (
     <div className="dashboard">
-      <Sidebar
-        email={user.email}
-        onOverview={resetFilters}
-        onCases={scrollToCases}
-        onNewCase={() => setShowNewCase(true)}
-        onReport={() => navigate("/reports")}
-        onSettings={() => setShowSettings(true)}
-        onLogout={handleLogout}
-      />
+      <Sidebar email={user.email} />
 
       <div className={`workspace ${selectedCase ? "has-details" : ""}`}>
         <main className="content">
@@ -135,13 +76,11 @@ function Home({ user }) {
             priority={priority}
             setPriority={setPriority}
             categories={categories}
-            onNewCase={() => setShowNewCase(true)}
           />
 
           <CaseTable
             cases={filteredCases}
             hasCases={cases.length > 0}
-            onNewCase={() => setShowNewCase(true)}
             selectedCase={selectedCase}
             onSelect={setSelectedCase}
           />
@@ -157,21 +96,6 @@ function Home({ user }) {
           />
         )}
       </div>
-
-      {showNewCase && (
-        <NewCaseModal
-          categories={categories}
-          onSave={addCase}
-          onClose={() => setShowNewCase(false)}
-        />
-      )}
-
-      {showSettings && (
-        <SettingsModal
-          email={user.email}
-          onClose={() => setShowSettings(false)}
-        />
-      )}
     </div>
   );
 }

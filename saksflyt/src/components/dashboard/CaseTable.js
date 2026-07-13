@@ -1,6 +1,7 @@
 import { CirclePlus, Folder, MoreHorizontal } from "lucide-react";
+import { Link } from "react-router-dom";
 
-function CaseTable({ cases, hasCases, onNewCase, selectedCase, onSelect }) {
+function CaseTable({ cases, hasCases, selectedCase, onSelect }) {
   return (
     <section className="table-card" id="case-table">
       <table>
@@ -67,9 +68,9 @@ function CaseTable({ cases, hasCases, onNewCase, selectedCase, onSelect }) {
               : "Opprett den første saken for å komme i gang."}
           </p>
           {!hasCases && (
-            <button onClick={onNewCase}>
+            <Link to="/new-case">
               <CirclePlus /> Opprett sak
-            </button>
+            </Link>
           )}
         </div>
       )}
