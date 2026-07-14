@@ -1,6 +1,19 @@
 .dashboard {
   min-height: 100vh;
   background: var(--background);
+  animation: dashboardEnter 0.45s ease-out;
+}
+
+@keyframes dashboardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .sidebar {

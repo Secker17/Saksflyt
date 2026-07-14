@@ -7,7 +7,7 @@ import {
 import { auth, googleProvider } from "../firebase";
 import { Link } from "react-router-dom";
 import { ArrowRight, LockKeyhole, Mail } from "lucide-react";
-import "../styles/Login.css";
+import "../styles/Auth.css";
 
 function Login() {
   const [email, setEmail] = useState("");

@@ -113,6 +113,10 @@
   font-weight: 700;
 }
 
+.signup-field + .signup-field {
+  margin-top: 20px;
+}
+
 .login-input {
   display: flex;
   align-items: center;
