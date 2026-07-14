@@ -1,11 +1,14 @@
-import { BarChart3, CirclePlus, FileLock2, Home, LogOut } from "lucide-react";
+import { BarChart3, CirclePlus, FileLock2, Home, LogOut, Users } from "lucide-react";
+import { useState } from "react";
 import { signOut } from "firebase/auth";
 import { NavLink } from "react-router-dom";
 import { auth } from "../../firebase";
 import { useTeam } from "../../TeamContext";
+import TeamMembers from "./TeamMembers";
 
 function Sidebar({ email }) {
-  const { teams, activeTeam, setActiveTeam, addTeam, useInvite } = useTeam();
+  const { teams, activeTeam, activeRole, setActiveTeam, addTeam, joinWithCode } = useTeam();
+  const [showMembers, setShowMembers] = useState(false);
 
   function logout() {
     signOut(auth);
@@ -21,7 +24,12 @@ function Sidebar({ email }) {
   async function joinAnotherTeam() {
     const code = window.prompt("Skriv inn invitasjonskoden");
     if (code) {
-      await useInvite(code);
+      try {
+        await joinWithCode(code);
+      } catch (error) {
+        console.error(error);
+        window.alert("Kunne ikke bli med. Sjekk koden og Firebase-reglene.");
+      }
     }
   }
 
@@ -66,6 +74,12 @@ function Sidebar({ email }) {
         <NavLink className="nav-item" to="/reports">
           <BarChart3 /> Rapporter
         </NavLink>
+
+        {activeRole === "owner" && (
+          <button className="nav-item member-button" onClick={() => setShowMembers(true)}>
+            <Users /> Medlemmer
+          </button>
+        )}
       </nav>
 
       <div className="sidebar-bottom">
@@ -84,6 +98,8 @@ function Sidebar({ email }) {
           </button>
         </div>
       </div>
+
+      {showMembers && <TeamMembers onClose={() => setShowMembers(false)} />}
     </aside>
   );
 }

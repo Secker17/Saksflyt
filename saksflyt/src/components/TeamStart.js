@@ -32,8 +32,9 @@ function TeamStart({ onCreate, onJoin }) {
 
     try {
       await onJoin(code);
-    } catch {
-      setError("Fant ikke et team med denne koden.");
+    } catch (firebaseError) {
+      console.error(firebaseError);
+      setError("Kunne ikke bli med. Sjekk koden og Firebase-reglene.");
     }
   }
 

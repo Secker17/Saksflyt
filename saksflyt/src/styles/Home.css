@@ -75,6 +75,151 @@
   font-size: 9px;
 }
 
+.member-button {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  text-align: left;
+}
+
+.member-background {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(20, 35, 60, 0.45);
+}
+
+.member-window {
+  width: min(560px, 100%);
+  padding: 28px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 20px 60px rgba(20, 35, 60, 0.2);
+}
+
+.member-window header,
+.member-row {
+  display: flex;
+  align-items: center;
+}
+
+.member-window header {
+  justify-content: space-between;
+}
+
+.member-window h2,
+.member-window p {
+  margin: 0;
+}
+
+.member-window p,
+.member-row small {
+  color: var(--muted);
+}
+
+.member-window p {
+  margin-top: 6px;
+}
+
+.member-close {
+  display: grid;
+  padding: 7px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--light-blue);
+  color: var(--navy);
+}
+
+.member-close svg {
+  width: 19px;
+}
+
+.role-help {
+  margin: 22px 0 10px;
+  padding: 13px;
+  border-radius: 9px;
+  background: var(--light-blue);
+  color: #47617f;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.member-row {
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.member-row > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.member-row strong,
+.member-row small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.member-row small {
+  margin-top: 4px;
+}
+
+.member-avatar {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--blue);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.member-row select {
+  padding: 9px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+}
+
+.no-access {
+  display: flex;
+  min-height: 100vh;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 30px;
+  text-align: center;
+}
+
+.no-access > svg {
+  width: 58px;
+  height: 58px;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--light-blue);
+  color: var(--blue);
+}
+
+.no-access h1 {
+  margin: 20px 0 8px;
+}
+
+.no-access p {
+  max-width: 480px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .main-nav {
   display: grid;
   gap: 7px;

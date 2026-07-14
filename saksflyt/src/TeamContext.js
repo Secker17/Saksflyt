@@ -1,5 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { createTeam, joinTeam, watchTeams } from "./teamService";
+import {
+  changeRole,
+  createTeam,
+  joinTeam,
+  saveMemberEmail,
+  watchTeams,
+} from "./teamService";
 import TeamStart from "./components/TeamStart";
 
 const TeamContext = createContext();
@@ -30,25 +36,57 @@ export function TeamProvider({ user, children }) {
     return stopWatching;
   }, [user]);
 
+  useEffect(() => {
+    if (!user?.email) {
+      return;
+    }
+
+    teams.forEach((team) => {
+      if (!team.memberEmails?.[user.uid]) {
+        saveMemberEmail(team.id, user).catch(console.error);
+      }
+    });
+  }, [teams, user]);
+
   async function addTeam(name) {
-    await createTeam(name, user.uid);
+    await createTeam(name, user);
   }
 
-  async function useInvite(teamId) {
-    await joinTeam(teamId, user.uid);
+  async function joinWithCode(teamId) {
+    const joinedTeamId = await joinTeam(teamId, user);
+    return joinedTeamId;
   }
+
+  async function setRole(userId, role) {
+    await changeRole(activeTeam.id, userId, role);
+  }
+
+  const activeRole = activeTeam?.ownerId === user?.uid
+    ? "owner"
+    : activeTeam?.roles?.[user?.uid] || "guest";
+  const verified = activeTeam?.ownerId === user?.uid
+    || activeTeam?.verified?.[user?.uid] === true;
 
   if (loading) {
     return <p className="loading">Laster team...</p>;
   }
 
   if (user && teams.length === 0) {
-    return <TeamStart onCreate={addTeam} onJoin={useInvite} />;
+    return <TeamStart onCreate={addTeam} onJoin={joinWithCode} />;
   }
 
   return (
     <TeamContext.Provider
-      value={{ teams, activeTeam, setActiveTeam, addTeam, useInvite }}
+      value={{
+        teams,
+        activeTeam,
+        activeRole,
+        verified,
+        setActiveTeam,
+        addTeam,
+        joinWithCode,
+        setRole,
+      }}
     >
       {children}
     </TeamContext.Provider>

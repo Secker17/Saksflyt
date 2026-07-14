@@ -8,6 +8,8 @@ import Signup from "./components/Signup";
 import Reports from "./components/Reports";
 import NewCase from "./components/NewCase";
 import { TeamProvider } from "./TeamContext";
+import { useTeam } from "./TeamContext";
+import NoTeamAccess from "./components/NoTeamAccess";
 import "./styles/App.css";
 
 function App() {
@@ -35,11 +37,11 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={user ? <Home user={user} /> : <Navigate to="/login" />}
+            element={user ? <TeamPage user={user}><Home user={user} /></TeamPage> : <Navigate to="/login" />}
           />
           <Route
             path="/cases"
-            element={user ? <Home user={user} /> : <Navigate to="/login" />}
+            element={user ? <TeamPage user={user}><Home user={user} /></TeamPage> : <Navigate to="/login" />}
           />
           <Route
             path="/login"
@@ -51,13 +53,20 @@ function App() {
           />
           <Route
             path="/reports"
-            element={user ? <Reports user={user} /> : <Navigate to="/login" />}
+            element={user ? <TeamPage user={user}><Reports user={user} /></TeamPage> : <Navigate to="/login" />}
           />
           <Route path="/new-case" element={<NewCase />} />
         </Routes>
       </TeamProvider>
     </BrowserRouter>
   );
+}
+
+function TeamPage({ user, children }) {
+  const { activeRole, verified } = useTeam();
+  const hasRole = ["owner", "admin", "member"].includes(activeRole);
+  const hasAccess = verified && hasRole;
+  return hasAccess ? children : <NoTeamAccess user={user} />;
 }
 
 export default App;
