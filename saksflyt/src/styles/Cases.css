@@ -791,7 +791,8 @@ tbody tr:hover {
   font-size: 12px;
   font-weight: bold;
 }
-#case-status {
+#case-status,
+#case-priority-details {
   width: 100%;
   padding: 10px;
   border: 1px solid #dbe2eb;

@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { auth, googleProvider } from "../firebase";
+import { auth, googleProvider } from "../config/firebase";
 import { Link } from "react-router-dom";
 import { ArrowRight, LockKeyhole, Mail } from "lucide-react";
 import "../styles/Auth.css";

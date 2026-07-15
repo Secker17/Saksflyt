@@ -1,15 +1,14 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
-import Reports from "./components/Reports";
-import NewCase from "./components/NewCase";
-import { TeamProvider } from "./TeamContext";
-import { useTeam } from "./TeamContext";
-import NoTeamAccess from "./components/NoTeamAccess";
+import { auth } from "./config/firebase";
+import Cases from "./pages/Cases";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Reports from "./pages/Reports";
+import NewCase from "./pages/NewCase";
+import { TeamProvider, useTeam } from "./context/TeamContext";
+import NoTeamAccess from "./pages/NoTeamAccess";
 import "./styles/App.css";
 
 function App() {
@@ -37,11 +36,11 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={user ? <TeamPage user={user}><Home user={user} /></TeamPage> : <Navigate to="/login" />}
+            element={<Navigate to={user ? "/cases" : "/login"} replace />}
           />
           <Route
             path="/cases"
-            element={user ? <TeamPage user={user}><Home user={user} /></TeamPage> : <Navigate to="/login" />}
+            element={user ? <TeamPage user={user}><Cases user={user} /></TeamPage> : <Navigate to="/login" />}
           />
           <Route
             path="/login"

@@ -1,9 +1,9 @@
-import { BarChart3, CirclePlus, FileLock2, Home, LogOut, Users } from "lucide-react";
+import { BarChart3, CirclePlus, FileLock2, LogOut, Users } from "lucide-react";
 import { useState } from "react";
 import { signOut } from "firebase/auth";
 import { NavLink } from "react-router-dom";
-import { auth } from "../../firebase";
-import { useTeam } from "../../TeamContext";
+import { auth } from "../../config/firebase";
+import { useTeam } from "../../context/TeamContext";
 import TeamMembers from "./TeamMembers";
 
 function Sidebar({ email }) {
@@ -59,10 +59,6 @@ function Sidebar({ email }) {
       </div>
 
       <nav className="main-nav">
-        <NavLink className="nav-item" to="/" end>
-          <Home /> Oversikt
-        </NavLink>
-
         <NavLink className="nav-item" to="/cases">
           <FileLock2 /> Saker
         </NavLink>

@@ -11,7 +11,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "../config/firebase";
 
 export function watchTeams(userId, setTeams) {
   const teamsQuery = query(

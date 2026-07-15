@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { deleteCase, updateCase, watchCases } from "../caseService";
-import { useTeam } from "../TeamContext";
-import Sidebar from "./dashboard/Sidebar";
-import Overview from "./dashboard/Overview";
-import CaseTable from "./dashboard/CaseTable";
-import CaseDetails from "./dashboard/CaseDetails";
-import "../styles/Home.css";
+import { deleteCase, updateCase, watchCases } from "../services/caseService";
+import { useTeam } from "../context/TeamContext";
+import Sidebar from "../components/dashboard/Sidebar";
+import Overview from "../components/dashboard/Overview";
+import CaseTable from "../components/dashboard/CaseTable";
+import CaseDetails from "../components/dashboard/CaseDetails";
+import "../styles/Cases.css";
 
 const categories = [
   "IT og tilgang",
@@ -15,7 +15,7 @@ const categories = [
   "Faktura",
 ];
 
-function Home({ user }) {
+function Cases({ user }) {
   const { activeTeam } = useTeam();
   const [cases, setCases] = useState([]);
   const [search, setSearch] = useState("");
@@ -104,4 +104,4 @@ function Home({ user }) {
   );
 }
 
-export default Home;
+export default Cases;

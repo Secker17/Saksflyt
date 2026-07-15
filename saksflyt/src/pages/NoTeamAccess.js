@@ -1,5 +1,5 @@
 import { LockKeyhole } from "lucide-react";
-import Sidebar from "./dashboard/Sidebar";
+import Sidebar from "../components/dashboard/Sidebar";
 
 function NoTeamAccess({ user }) {
   return (

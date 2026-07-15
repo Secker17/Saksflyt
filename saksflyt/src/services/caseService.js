@@ -9,7 +9,7 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "../config/firebase";
 
 export function watchCases(teamId, setCases) {
   const casesRef = collection(db, "teams", teamId, "cases");

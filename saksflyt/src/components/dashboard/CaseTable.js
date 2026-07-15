@@ -1,6 +1,6 @@
 import { CirclePlus, Folder, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useTeam } from "../../TeamContext";
+import { useTeam } from "../../context/TeamContext";
 
 function CaseTable({ cases, hasCases, selectedCase, onSelect }) {
   const { activeTeam } = useTeam();

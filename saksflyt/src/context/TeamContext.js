@@ -5,8 +5,8 @@ import {
   joinTeam,
   saveMemberEmail,
   watchTeams,
-} from "./teamService";
-import TeamStart from "./components/TeamStart";
+} from "../services/teamService";
+import TeamStart from "../pages/TeamStart";
 
 const TeamContext = createContext();
 

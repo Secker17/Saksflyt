@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ArrowRight, LockKeyhole, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
-import { auth } from "../firebase";
+import { auth } from "../config/firebase";
 import "../styles/Auth.css";
 
 function Signup() {

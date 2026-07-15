@@ -1,8 +1,8 @@
 import { CheckCircle2, Clock3, FileText } from "lucide-react";
 import { useEffect, useState } from "react";
-import Sidebar from "./dashboard/Sidebar";
-import { watchCases } from "../caseService";
-import { useTeam } from "../TeamContext";
+import Sidebar from "../components/dashboard/Sidebar";
+import { watchCases } from "../services/caseService";
+import { useTeam } from "../context/TeamContext";
 import "../styles/Reports.css";
 
 function Reports({ user }) {

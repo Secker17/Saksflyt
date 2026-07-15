@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useTeam } from "../../TeamContext";
+import { useTeam } from "../../context/TeamContext";
 
 const roleNames = {
   owner: "Eier",

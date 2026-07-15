@@ -19,6 +19,10 @@ function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
     onUpdate({ ...item, status: event.target.value });
   }
 
+  function changePriority(event) {
+    onUpdate({ ...item, priority: event.target.value });
+  }
+
   function deleteCase() {
     if (window.confirm("Vil du slette denne saken?")) {
       onDelete(item.id);
@@ -36,8 +40,8 @@ function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
 
       <div className="details-badges">
         <span className="badge status-ny">{item.status}</span>
-        <span className={`badge priority-${item.priority.toLowerCase()}`}>
-          {item.priority} prioritet
+        <span className={`badge priority-${(item.priority || "Middels").toLowerCase()}`}>
+          {item.priority || "Middels"} prioritet
         </span>
       </div>
 
@@ -74,6 +78,21 @@ function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
           <option>Ny</option>
           <option>Under arbeid</option>
           <option>Ferdig</option>
+        </select>
+      </section>
+
+      <section className="detail-section">
+        <label className="status-label" htmlFor="case-priority-details">
+          Prioritet
+        </label>
+        <select
+          id="case-priority-details"
+          value={item.priority || "Middels"}
+          onChange={changePriority}
+        >
+          <option>Lav</option>
+          <option>Middels</option>
+          <option>Høy</option>
         </select>
       </section>
 

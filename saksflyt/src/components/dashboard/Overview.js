@@ -7,7 +7,7 @@ import {
   Search,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useTeam } from "../../TeamContext";
+import { useTeam } from "../../context/TeamContext";
 
 function Overview({
   cases,
