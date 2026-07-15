@@ -4,6 +4,7 @@ import {
   createTeam,
   joinTeam,
   saveMemberEmail,
+  updateTeamSettings,
   watchTeams,
 } from "../services/teamService";
 import TeamStart from "../pages/TeamStart";
@@ -61,6 +62,10 @@ export function TeamProvider({ user, children }) {
     await changeRole(activeTeam.id, userId, role);
   }
 
+  async function saveSettings(settings) {
+    await updateTeamSettings(activeTeam.id, settings);
+  }
+
   const activeRole = activeTeam?.ownerId === user?.uid
     ? "owner"
     : activeTeam?.roles?.[user?.uid] || "guest";
@@ -86,6 +91,7 @@ export function TeamProvider({ user, children }) {
         addTeam,
         joinWithCode,
         setRole,
+        saveSettings,
       }}
     >
       {children}

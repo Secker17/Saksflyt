@@ -20,11 +20,12 @@ function Overview({
   priority,
   setPriority,
   categories,
+  statuses,
 }) {
   const { activeTeam } = useTeam();
-  const newCases = countCases(cases, "Ny");
-  const activeCases = countCases(cases, "Under arbeid");
-  const finishedCases = countCases(cases, "Ferdig");
+  const newCases = countCases(cases, statuses[0]);
+  const activeCases = countCases(cases, statuses[1]);
+  const finishedCases = countCases(cases, statuses[statuses.length - 1]);
 
   return (
     <>
@@ -32,19 +33,19 @@ function Overview({
         <StatCard
           icon={<FileText />}
           color="blue"
-          title="Nye saker"
+          title={statuses[0]}
           number={newCases}
         />
         <StatCard
           icon={<Clock3 />}
           color="yellow"
-          title="Under arbeid"
+          title={statuses[1] || "Under arbeid"}
           number={activeCases}
         />
         <StatCard
           icon={<Check />}
           color="green"
-          title="Ferdige"
+          title={statuses[statuses.length - 1]}
           number={finishedCases}
         />
       </section>
@@ -64,7 +65,7 @@ function Overview({
           label="Status"
           value={status}
           onChange={setStatus}
-          options={["Alle", "Ny", "Under arbeid", "Ferdig"]}
+          options={["Alle", ...statuses]}
         />
         <Filter
           label="Kategori"

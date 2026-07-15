@@ -1,14 +1,17 @@
-import { BarChart3, CirclePlus, FileLock2, LogOut, Users } from "lucide-react";
+import { BarChart3, CirclePlus, FileLock2, LogOut, Settings, Users } from "lucide-react";
 import { useState } from "react";
 import { signOut } from "firebase/auth";
 import { NavLink } from "react-router-dom";
 import { auth } from "../../config/firebase";
 import { useTeam } from "../../context/TeamContext";
 import TeamMembers from "./TeamMembers";
+import TeamSettings from "./TeamSettings";
+import "../../styles/DashboardExtras.css";
 
 function Sidebar({ email }) {
   const { teams, activeTeam, activeRole, setActiveTeam, addTeam, joinWithCode } = useTeam();
   const [showMembers, setShowMembers] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   function logout() {
     signOut(auth);
@@ -72,9 +75,14 @@ function Sidebar({ email }) {
         </NavLink>
 
         {activeRole === "owner" && (
-          <button className="nav-item member-button" onClick={() => setShowMembers(true)}>
-            <Users /> Medlemmer
-          </button>
+          <>
+            <button className="nav-item member-button" onClick={() => setShowMembers(true)}>
+              <Users /> Medlemmer
+            </button>
+            <button className="nav-item member-button" onClick={() => setShowSettings(true)}>
+              <Settings /> Innstillinger
+            </button>
+          </>
         )}
       </nav>
 
@@ -96,6 +104,7 @@ function Sidebar({ email }) {
       </div>
 
       {showMembers && <TeamMembers onClose={() => setShowMembers(false)} />}
+      {showSettings && <TeamSettings onClose={() => setShowSettings(false)} />}
     </aside>
   );
 }

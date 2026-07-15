@@ -2,7 +2,6 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Disse verdiene kobler nettsiden til prosjektet mitt i Firebase.
 const firebaseConfig = {
   apiKey: "AIzaSyCrsVBes3rkaRF8kIbWc8viGTJJB_7TNuQ",
   authDomain: "saksflyt-75921.firebaseapp.com",
@@ -15,11 +14,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-// auth brukes av sidene som logger inn, registrerer og logger ut brukere.
 export const auth = getAuth(app);
 
-// Denne brukes når en bruker vil logge inn med Google.
 export const googleProvider = new GoogleAuthProvider();
 
-// db brukes til team og saker i Firestore.
 export const db = getFirestore(app);

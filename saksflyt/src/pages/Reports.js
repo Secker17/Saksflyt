@@ -3,17 +3,19 @@ import { useEffect, useState } from "react";
 import Sidebar from "../components/dashboard/Sidebar";
 import { watchCases } from "../services/caseService";
 import { useTeam } from "../context/TeamContext";
+import { DEFAULT_STATUSES } from "../config/caseOptions";
 import "../styles/Reports.css";
 
 function Reports({ user }) {
   const { activeTeam } = useTeam();
+  const statuses = activeTeam?.settings?.statuses || DEFAULT_STATUSES;
   const [cases, setCases] = useState([]);
 
   useEffect(() => {
     return watchCases(activeTeam.id, setCases);
   }, [activeTeam]);
-  const active = cases.filter((item) => item.status === "Under arbeid").length;
-  const finished = cases.filter((item) => item.status === "Ferdig").length;
+  const active = cases.filter((item) => !item.archived && item.status === statuses[1]).length;
+  const finished = cases.filter((item) => !item.archived && item.status === statuses[statuses.length - 1]).length;
 
   return (
     <div className="dashboard">
@@ -35,13 +37,13 @@ function Reports({ user }) {
           <ReportCard
             icon={<Clock3 />}
             color="yellow"
-            title="Under arbeid"
+            title={statuses[1] || "Under arbeid"}
             number={active}
           />
           <ReportCard
             icon={<CheckCircle2 />}
             color="green"
-            title="Ferdig behandlet"
+            title={statuses[statuses.length - 1]}
             number={finished}
           />
         </section>
@@ -65,7 +67,7 @@ function Reports({ user }) {
               <span
                 className={`badge status-${item.status.toLowerCase().replace(" ", "-")}`}
               >
-                {item.status}
+                {item.archived ? "Arkivert" : item.status}
               </span>
             </div>
           ))}

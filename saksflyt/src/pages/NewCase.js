@@ -3,17 +3,14 @@ import { ArrowLeft, CheckCircle2, Send } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { createCase } from "../services/caseService";
 import { validateCase } from "../utils/caseValidation";
+import { useTeam } from "../context/TeamContext";
+import { DEFAULT_CATEGORIES, DEFAULT_STATUSES, PRIORITIES } from "../config/caseOptions";
 import "../styles/NewCase.css";
 
-const categories = [
-  "IT og tilgang",
-  "Kundeopplysninger",
-  "Teknisk støtte",
-  "Medlemskap",
-  "Faktura",
-];
-
 function NewCase() {
+  const { activeTeam } = useTeam();
+  const categories = activeTeam?.settings?.categories || DEFAULT_CATEGORIES;
+  const statuses = activeTeam?.settings?.statuses || DEFAULT_STATUSES;
   const [searchParams] = useSearchParams();
   const teamId = searchParams.get("team");
   const [title, setTitle] = useState("");
@@ -48,7 +45,7 @@ function NewCase() {
       dueDate: "",
       customerName: name,
       customerEmail: "",
-      status: "Ny",
+      status: statuses[0],
       person: "Ikke tildelt",
       initials: "--",
       date: new Date().toLocaleDateString("no-NO"),
@@ -121,7 +118,7 @@ function NewCase() {
               label="Prioritet"
               value={priority}
               setValue={setPriority}
-              options={["Lav", "Middels", "Høy"]}
+              options={PRIORITIES}
             />
           </div>
 

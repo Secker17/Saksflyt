@@ -1,7 +1,6 @@
 import {
   addDoc,
   collection,
-  deleteDoc,
   doc,
   onSnapshot,
   orderBy,
@@ -38,7 +37,10 @@ export function updateCase(teamId, caseId, changes) {
   return updateDoc(caseRef, changes);
 }
 
-export function deleteCase(teamId, caseId) {
+export function archiveCase(teamId, caseId) {
   const caseRef = doc(db, "teams", teamId, "cases", caseId);
-  return deleteDoc(caseRef);
+  return updateDoc(caseRef, {
+    archived: true,
+    archivedAt: serverTimestamp(),
+  });
 }

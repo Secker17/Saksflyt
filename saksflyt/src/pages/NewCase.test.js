@@ -9,6 +9,9 @@ jest.mock("react-router-dom", () => ({
 }), { virtual: true });
 
 jest.mock("../services/caseService", () => ({ createCase: jest.fn() }));
+jest.mock("../context/TeamContext", () => ({
+  useTeam: () => ({ activeTeam: null }),
+}));
 
 beforeEach(() => createCase.mockClear());
 

@@ -12,6 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { DEFAULT_CATEGORIES, DEFAULT_STATUSES } from "../config/caseOptions";
 
 export function watchTeams(userId, setTeams) {
   const teamsQuery = query(
@@ -40,6 +41,10 @@ export async function createTeam(name, user) {
     roles: { [user.uid]: "owner" },
     verified: { [user.uid]: true },
     memberEmails: { [user.uid]: user.email },
+    settings: {
+      categories: DEFAULT_CATEGORIES,
+      statuses: DEFAULT_STATUSES,
+    },
     createdAt: serverTimestamp(),
   });
 }
@@ -78,6 +83,10 @@ export function changeRole(teamId, userId, role) {
     [`roles.${userId}`]: role,
     [`verified.${userId}`]: role !== "guest",
   });
+}
+
+export function updateTeamSettings(teamId, settings) {
+  return updateDoc(doc(db, "teams", teamId), { settings });
 }
 
 // Lagrer e-post slik at teameieren ser hvem medlemmet er.

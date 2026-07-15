@@ -792,7 +792,8 @@ tbody tr:hover {
   font-weight: bold;
 }
 #case-status,
-#case-priority-details {
+#case-priority-details,
+#case-assignee {
   width: 100%;
   padding: 10px;
   border: 1px solid #dbe2eb;

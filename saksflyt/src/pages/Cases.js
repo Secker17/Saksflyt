@@ -1,22 +1,18 @@
 import { useEffect, useState } from "react";
-import { deleteCase, updateCase, watchCases } from "../services/caseService";
+import { archiveCase, updateCase, watchCases } from "../services/caseService";
 import { useTeam } from "../context/TeamContext";
 import Sidebar from "../components/dashboard/Sidebar";
 import Overview from "../components/dashboard/Overview";
 import CaseTable from "../components/dashboard/CaseTable";
 import CaseDetails from "../components/dashboard/CaseDetails";
+import Notifications from "../components/dashboard/Notifications";
+import { DEFAULT_CATEGORIES, DEFAULT_STATUSES } from "../config/caseOptions";
 import "../styles/Cases.css";
-
-const categories = [
-  "IT og tilgang",
-  "Kundeopplysninger",
-  "Teknisk støtte",
-  "Medlemskap",
-  "Faktura",
-];
 
 function Cases({ user }) {
   const { activeTeam } = useTeam();
+  const categories = activeTeam?.settings?.categories || DEFAULT_CATEGORIES;
+  const statuses = activeTeam?.settings?.statuses || DEFAULT_STATUSES;
   const [cases, setCases] = useState([]);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("Alle");
@@ -34,7 +30,8 @@ function Cases({ user }) {
   }, [activeTeam]);
 
   // Lager en ny liste basert på søk og valgte filtre.
-  const filteredCases = cases.filter((item) => {
+  const visibleCases = cases.filter((item) => !item.archived);
+  const filteredCases = visibleCases.filter((item) => {
     const title = item.title.toLowerCase();
     const searchText = search.toLowerCase();
     const textMatches =
@@ -54,7 +51,7 @@ function Cases({ user }) {
   }
 
   async function removeCase(id) {
-    await deleteCase(activeTeam.id, id);
+    await archiveCase(activeTeam.id, id);
     setSelectedCase(null);
   }
 
@@ -65,12 +62,13 @@ function Cases({ user }) {
       <div className={`workspace ${selectedCase ? "has-details" : ""}`}>
         <main className="content">
           <header className="page-heading">
+            <Notifications cases={visibleCases} userId={user.uid} statuses={statuses} onSelect={setSelectedCase} />
             <h1>Saksoversikt</h1>
             <p>Oversikt over registrerte saker og henvendelser</p>
           </header>
 
           <Overview
-            cases={cases}
+            cases={visibleCases}
             search={search}
             setSearch={setSearch}
             status={status}
@@ -80,11 +78,12 @@ function Cases({ user }) {
             priority={priority}
             setPriority={setPriority}
             categories={categories}
+            statuses={statuses}
           />
 
           <CaseTable
             cases={filteredCases}
-            hasCases={cases.length > 0}
+            hasCases={visibleCases.length > 0}
             selectedCase={selectedCase}
             onSelect={setSelectedCase}
           />
@@ -94,6 +93,8 @@ function Cases({ user }) {
           <CaseDetails
             item={selectedCase}
             userEmail={user.email}
+            userId={user.uid}
+            statuses={statuses}
             onUpdate={saveCase}
             onDelete={removeCase}
             onClose={() => setSelectedCase(null)}

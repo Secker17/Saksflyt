@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { ListFilter, Trash2, UserPlus, X } from "lucide-react";
+import { Archive, ListFilter, UserPlus, X } from "lucide-react";
+import { useTeam } from "../../context/TeamContext";
 
-function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
+function CaseDetails({ item, userEmail, userId, statuses, onUpdate, onDelete, onClose }) {
+  const { activeTeam } = useTeam();
   const [showActivity, setShowActivity] = useState(false);
 
   function assignToMe() {
@@ -10,8 +12,28 @@ function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
     onUpdate({
       ...item,
       person: name,
+      assignedTo: userId,
       initials: name.slice(0, 2).toUpperCase(),
       status: "Under arbeid",
+    });
+  }
+
+  function changeAssignee(event) {
+    const assignedTo = event.target.value;
+
+    if (!assignedTo) {
+      onUpdate({ ...item, assignedTo: "", person: "Ikke tildelt", initials: "--" });
+      return;
+    }
+
+    const email = activeTeam.memberEmails?.[assignedTo] || "Ukjent bruker";
+    const name = email.split("@")[0];
+    onUpdate({
+      ...item,
+      assignedTo,
+      person: name,
+      initials: name.slice(0, 2).toUpperCase(),
+      status: item.status === statuses[0] ? statuses[1] : item.status,
     });
   }
 
@@ -23,8 +45,8 @@ function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
     onUpdate({ ...item, priority: event.target.value });
   }
 
-  function deleteCase() {
-    if (window.confirm("Vil du slette denne saken?")) {
+  function archiveCase() {
+    if (window.confirm("Vil du arkivere denne saken? Den blir fortsatt synlig i rapporter.")) {
       onDelete(item.id);
     }
   }
@@ -60,8 +82,17 @@ function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
       </div>
 
       <section className="detail-section">
-        <strong>Ansvarlig</strong>
-        <p>{item.person}</p>
+        <label className="status-label" htmlFor="case-assignee">Ansvarlig</label>
+        <select id="case-assignee" value={item.assignedTo || ""} onChange={changeAssignee}>
+          <option value="">Ikke tildelt</option>
+          {activeTeam.members.filter((memberId) => (
+            memberId === activeTeam.ownerId || activeTeam.verified?.[memberId] === true
+          )).map((memberId) => (
+            <option key={memberId} value={memberId}>
+              {activeTeam.memberEmails?.[memberId] || "Ukjent bruker"}
+            </option>
+          ))}
+        </select>
 
         {item.person === "Ikke tildelt" && (
           <button className="assign-button" onClick={assignToMe}>
@@ -75,9 +106,7 @@ function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
           Status
         </label>
         <select id="case-status" value={item.status} onChange={changeStatus}>
-          <option>Ny</option>
-          <option>Under arbeid</option>
-          <option>Ferdig</option>
+          {statuses.map((status) => <option key={status}>{status}</option>)}
         </select>
       </section>
 
@@ -100,8 +129,8 @@ function CaseDetails({ item, userEmail, onUpdate, onDelete, onClose }) {
         <ListFilter /> Se alle aktiviteter
       </button>
 
-      <button className="delete-case-button" onClick={deleteCase}>
-        <Trash2 /> Slett sak
+      <button className="delete-case-button" onClick={archiveCase}>
+        <Archive /> Arkiver sak
       </button>
 
       {showActivity && (
