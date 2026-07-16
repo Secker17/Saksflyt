@@ -15,6 +15,7 @@ function CaseDetails({ item, userId, statuses, priorities, onUpdate, onDelete, o
   }
 
   function changeAssignee(event) {
+    // Lagrer brukerens id slik at saken kan vises i varslene deres.
     const assignedTo = event.target.value;
 
     if (!assignedTo) {

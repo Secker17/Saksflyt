@@ -21,6 +21,8 @@ function TeamSettings({ onClose }) {
 
   async function handleSave(event) {
     event.preventDefault();
+
+    // Gjør hver linje om til et eget valg.
     const cleanCategories = categories.split("\n").map((item) => item.trim()).filter(Boolean);
     const cleanStatuses = statuses.split("\n").map((item) => item.trim()).filter(Boolean);
     const cleanPriorities = priorities.split("\n").map((item) => item.trim()).filter(Boolean);

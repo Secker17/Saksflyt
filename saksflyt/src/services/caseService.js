@@ -12,6 +12,7 @@ import {
 import { db } from "../config/firebase";
 
 export function watchCases(teamId, setCases) {
+  // Følger med på sakene og oppdaterer siden når Firestore endres.
   const casesRef = collection(db, "teams", teamId, "cases");
   const casesQuery = query(casesRef, orderBy("createdAt", "desc"));
 
@@ -26,6 +27,7 @@ export function watchCases(teamId, setCases) {
 }
 
 export function createCase(teamId, newCase) {
+  // Lagrer saken under teamet den tilhører.
   const casesRef = collection(db, "teams", teamId, "cases");
   return addDoc(casesRef, {
     ...newCase,
@@ -39,6 +41,7 @@ export function updateCase(teamId, caseId, changes) {
 }
 
 export function cleanupUnusedCaseFields(teamId, cases) {
+  // Fjerner gamle felt som ikke lenger brukes på nettsiden.
   const unusedFields = ["customerEmail", "customerName", "dueDate", "initials", "person", "date"];
   const casesToClean = cases.filter((item) => (
     unusedFields.some((field) => Object.hasOwn(item, field))
@@ -58,6 +61,7 @@ export function cleanupUnusedCaseFields(teamId, cases) {
 }
 
 export function archiveCase(teamId, caseId) {
+  // Saken beholdes i databasen selv om den skjules fra sakslisten.
   const caseRef = doc(db, "teams", teamId, "cases", caseId);
   return updateDoc(caseRef, {
     archived: true,

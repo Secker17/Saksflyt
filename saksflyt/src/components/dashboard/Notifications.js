@@ -3,6 +3,8 @@ import { useState } from "react";
 
 function Notifications({ cases, userId, statuses, onSelect }) {
   const [open, setOpen] = useState(false);
+
+  // Viser bare aktive saker som er tildelt den innloggede brukeren.
   const assignedCases = cases.filter(
     (item) => item.assignedTo === userId && item.status !== statuses[statuses.length - 1],
   );

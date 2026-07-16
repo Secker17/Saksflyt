@@ -24,6 +24,8 @@ function NewCase() {
 
   async function submitCase(event) {
     event.preventDefault();
+
+    // Kontrollerer feltene før saken sendes til Firestore.
     const validationError = validateCase({ title, description });
 
     if (validationError) {
@@ -36,6 +38,7 @@ function NewCase() {
     const number = String(Date.now()).slice(-6);
     const id = `${year}-${number}`;
 
+    // Samler informasjonen som skal lagres på saken.
     await createCase(teamId, {
       caseNumber: id,
       title,

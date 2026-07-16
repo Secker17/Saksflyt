@@ -22,6 +22,7 @@ function Cases({ user }) {
   const [selectedCase, setSelectedCase] = useState(null);
 
   useEffect(() => {
+    // Starter lytting når brukeren velger et team.
     if (!activeTeam) {
       return;
     }
@@ -52,6 +53,7 @@ function Cases({ user }) {
   });
 
   async function saveCase(changes) {
+    // Lagrer bare feltene som faktisk ble endret.
     await updateCase(activeTeam.id, selectedCase.id, changes);
     setSelectedCase({ ...selectedCase, ...changes });
   }

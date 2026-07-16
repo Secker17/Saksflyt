@@ -11,11 +11,14 @@ const EMAIL_KEY = "emailForSignIn";
 const WAITING_KEY = "waitingForEmailLink";
 
 export async function checkPasswordAndSendLoginLink(email, password) {
+  // Husker at brukeren må åpne lenken før innloggingen er ferdig.
   window.sessionStorage.setItem(WAITING_KEY, "true");
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
     await signOut(auth);
+
+    // Firebase sender en trygg innloggingslenke til epostadressen.
     await sendSignInLinkToEmail(auth, email, {
       url: `${window.location.origin}/login`,
       handleCodeInApp: true,
@@ -28,6 +31,7 @@ export async function checkPasswordAndSendLoginLink(email, password) {
 }
 
 export async function finishLoginFromEmailLink() {
+  // Stopper hvis siden ikke ble åpnet fra en Firebase lenke.
   if (!isSignInWithEmailLink(auth, window.location.href)) {
     return;
   }
@@ -43,6 +47,8 @@ export async function finishLoginFromEmailLink() {
   }
 
   await signInWithEmailLink(auth, email, window.location.href);
+
+  // Fjerner det som bare var nødvendig mens vi ventet på lenken.
   window.localStorage.removeItem(EMAIL_KEY);
   window.sessionStorage.removeItem(WAITING_KEY);
   window.history.replaceState({}, document.title, "/cases");

@@ -17,6 +17,7 @@ export function TeamProvider({ user, children }) {
   const [loading, setLoading] = useState(Boolean(user));
 
   useEffect(() => {
+    // Henter teamene til brukeren etter innlogging.
     if (!user) {
       setLoading(false);
       return;
@@ -81,6 +82,7 @@ export function TeamProvider({ user, children }) {
   }
 
   return (
+    // Gjør teaminformasjonen tilgjengelig for resten av løsningen.
     <TeamContext.Provider
       value={{
         teams,
