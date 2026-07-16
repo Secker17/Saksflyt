@@ -21,6 +21,7 @@ function Overview({
   setPriority,
   categories,
   statuses,
+  priorities,
 }) {
   const { activeTeam } = useTeam();
   const newCases = countCases(cases, statuses[0]);
@@ -77,7 +78,7 @@ function Overview({
           label="Prioritet"
           value={priority}
           onChange={setPriority}
-          options={["Alle", "Høy", "Middels", "Lav"]}
+          options={["Alle", ...priorities]}
         />
 
         <Link

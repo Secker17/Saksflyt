@@ -1,20 +1,16 @@
 import { useState } from "react";
 import { Archive, ListFilter, UserPlus, X } from "lucide-react";
 import { useTeam } from "../../context/TeamContext";
+import { formatDate } from "../../utils/formatDate";
 
-function CaseDetails({ item, userEmail, userId, statuses, onUpdate, onDelete, onClose }) {
+function CaseDetails({ item, userId, statuses, priorities, onUpdate, onDelete, onClose }) {
   const { activeTeam } = useTeam();
   const [showActivity, setShowActivity] = useState(false);
 
   function assignToMe() {
-    const name = userEmail.split("@")[0];
-
     onUpdate({
-      ...item,
-      person: name,
       assignedTo: userId,
-      initials: name.slice(0, 2).toUpperCase(),
-      status: "Under arbeid",
+      status: statuses[1],
     });
   }
 
@@ -22,27 +18,22 @@ function CaseDetails({ item, userEmail, userId, statuses, onUpdate, onDelete, on
     const assignedTo = event.target.value;
 
     if (!assignedTo) {
-      onUpdate({ ...item, assignedTo: "", person: "Ikke tildelt", initials: "--" });
+      onUpdate({ assignedTo: "" });
       return;
     }
 
-    const email = activeTeam.memberEmails?.[assignedTo] || "Ukjent bruker";
-    const name = email.split("@")[0];
     onUpdate({
-      ...item,
       assignedTo,
-      person: name,
-      initials: name.slice(0, 2).toUpperCase(),
       status: item.status === statuses[0] ? statuses[1] : item.status,
     });
   }
 
   function changeStatus(event) {
-    onUpdate({ ...item, status: event.target.value });
+    onUpdate({ status: event.target.value });
   }
 
   function changePriority(event) {
-    onUpdate({ ...item, priority: event.target.value });
+    onUpdate({ priority: event.target.value });
   }
 
   function archiveCase() {
@@ -62,8 +53,8 @@ function CaseDetails({ item, userEmail, userId, statuses, onUpdate, onDelete, on
 
       <div className="details-badges">
         <span className="badge status-ny">{item.status}</span>
-        <span className={`badge priority-${(item.priority || "Middels").toLowerCase()}`}>
-          {item.priority || "Middels"} prioritet
+        <span className={`badge priority-${(item.priority || priorities[0]).toLowerCase()}`}>
+          {item.priority || priorities[0]} prioritet
         </span>
       </div>
 
@@ -71,15 +62,7 @@ function CaseDetails({ item, userEmail, userId, statuses, onUpdate, onDelete, on
       <p className="detail-category">{item.category}</p>
 
       <Info title="Beskrivelse" text={item.description} />
-      <Info
-        title="Innmelder"
-        text={`${item.customerName || "Ukjent"} · ${item.customerEmail || "Ingen e-post"}`}
-      />
-
-      <div className="detail-columns">
-        <Info title="Opprettet" text={item.date} />
-        <Info title="Frist" text={item.dueDate || "Ikke satt"} />
-      </div>
+      <Info title="Opprettet" text={formatDate(item.createdAt)} />
 
       <section className="detail-section">
         <label className="status-label" htmlFor="case-assignee">Ansvarlig</label>
@@ -94,7 +77,7 @@ function CaseDetails({ item, userEmail, userId, statuses, onUpdate, onDelete, on
           ))}
         </select>
 
-        {item.person === "Ikke tildelt" && (
+        {!item.assignedTo && (
           <button className="assign-button" onClick={assignToMe}>
             <UserPlus /> Tildel til meg
           </button>
@@ -116,12 +99,10 @@ function CaseDetails({ item, userEmail, userId, statuses, onUpdate, onDelete, on
         </label>
         <select
           id="case-priority-details"
-          value={item.priority || "Middels"}
+          value={item.priority || priorities[0]}
           onChange={changePriority}
         >
-          <option>Lav</option>
-          <option>Middels</option>
-          <option>Høy</option>
+          {priorities.map((priority) => <option key={priority}>{priority}</option>)}
         </select>
       </section>
 
@@ -141,8 +122,7 @@ function CaseDetails({ item, userEmail, userId, statuses, onUpdate, onDelete, on
               <X />
             </button>
           </div>
-          <p>Saken ble opprettet {item.date}.</p>
-          <p>Ansvarlig: {item.person}.</p>
+          <p>Saken ble opprettet {formatDate(item.createdAt)}.</p>
           <p>Status: {item.status}.</p>
           <button
             className="activity-close"

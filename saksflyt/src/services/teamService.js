@@ -12,7 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
-import { DEFAULT_CATEGORIES, DEFAULT_STATUSES } from "../config/caseOptions";
+import { DEFAULT_CATEGORIES, DEFAULT_STATUSES, PRIORITIES } from "../config/caseOptions";
 
 export function watchTeams(userId, setTeams) {
   const teamsQuery = query(
@@ -44,6 +44,7 @@ export async function createTeam(name, user) {
     settings: {
       categories: DEFAULT_CATEGORIES,
       statuses: DEFAULT_STATUSES,
+      priorities: PRIORITIES,
     },
     createdAt: serverTimestamp(),
   });

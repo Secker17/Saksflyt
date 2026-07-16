@@ -1,13 +1,13 @@
 import { useState } from "react";
 import {
   sendPasswordResetEmail,
-  signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
 import { auth, googleProvider } from "../config/firebase";
 import { Link } from "react-router-dom";
 import { ArrowRight, LockKeyhole, Mail } from "lucide-react";
 import "../styles/Auth.css";
+import { checkPasswordAndSendLoginLink } from "../services/authService";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -20,10 +20,15 @@ function Login() {
     setError("");
 
     try {
-      // Firebase sjekker om e-post og passord tilhører en registrert bruker.
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch {
-      setError("Feil e-post eller passord.");
+      await checkPasswordAndSendLoginLink(email, password);
+      setPassword("");
+      setMessage("Vi har sendt en innloggingslenke til e-posten din.");
+    } catch (firebaseError) {
+      if (firebaseError.code === "auth/operation-not-allowed") {
+        setError("E-postlenke må aktiveres i Firebase Authentication.");
+      } else {
+        setError("Feil e-post eller passord.");
+      }
     }
   }
 

@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-import { archiveCase, updateCase, watchCases } from "../services/caseService";
+import { archiveCase, cleanupUnusedCaseFields, updateCase, watchCases } from "../services/caseService";
 import { useTeam } from "../context/TeamContext";
 import Sidebar from "../components/dashboard/Sidebar";
 import Overview from "../components/dashboard/Overview";
 import CaseTable from "../components/dashboard/CaseTable";
 import CaseDetails from "../components/dashboard/CaseDetails";
 import Notifications from "../components/dashboard/Notifications";
-import { DEFAULT_CATEGORIES, DEFAULT_STATUSES } from "../config/caseOptions";
+import { DEFAULT_CATEGORIES, DEFAULT_STATUSES, PRIORITIES } from "../config/caseOptions";
 import "../styles/Cases.css";
 
 function Cases({ user }) {
   const { activeTeam } = useTeam();
   const categories = activeTeam?.settings?.categories || DEFAULT_CATEGORIES;
   const statuses = activeTeam?.settings?.statuses || DEFAULT_STATUSES;
+  const priorities = activeTeam?.settings?.priorities || PRIORITIES;
   const [cases, setCases] = useState([]);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("Alle");
@@ -29,6 +30,12 @@ function Cases({ user }) {
     return watchCases(activeTeam.id, setCases);
   }, [activeTeam]);
 
+  useEffect(() => {
+    if (activeTeam && cases.length > 0) {
+      cleanupUnusedCaseFields(activeTeam.id, cases).catch(console.error);
+    }
+  }, [activeTeam, cases]);
+
   // Lager en ny liste basert på søk og valgte filtre.
   const visibleCases = cases.filter((item) => !item.archived);
   const filteredCases = visibleCases.filter((item) => {
@@ -44,10 +51,9 @@ function Cases({ user }) {
     return textMatches && statusMatches && categoryMatches && priorityMatches;
   });
 
-  async function saveCase(updatedCase) {
-    const { id, ...changes } = updatedCase;
-    await updateCase(activeTeam.id, id, changes);
-    setSelectedCase(updatedCase);
+  async function saveCase(changes) {
+    await updateCase(activeTeam.id, selectedCase.id, changes);
+    setSelectedCase({ ...selectedCase, ...changes });
   }
 
   async function removeCase(id) {
@@ -79,6 +85,7 @@ function Cases({ user }) {
             setPriority={setPriority}
             categories={categories}
             statuses={statuses}
+            priorities={priorities}
           />
 
           <CaseTable
@@ -92,9 +99,9 @@ function Cases({ user }) {
         {selectedCase && (
           <CaseDetails
             item={selectedCase}
-            userEmail={user.email}
             userId={user.uid}
             statuses={statuses}
+            priorities={priorities}
             onUpdate={saveCase}
             onDelete={removeCase}
             onClose={() => setSelectedCase(null)}

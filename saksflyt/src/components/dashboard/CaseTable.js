@@ -1,6 +1,7 @@
 import { CirclePlus, Folder, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTeam } from "../../context/TeamContext";
+import { formatDate } from "../../utils/formatDate";
 
 function CaseTable({ cases, hasCases, selectedCase, onSelect }) {
   const { activeTeam } = useTeam();
@@ -20,7 +21,11 @@ function CaseTable({ cases, hasCases, selectedCase, onSelect }) {
           </tr>
         </thead>
         <tbody>
-          {cases.map((item) => (
+          {cases.map((item) => {
+              const email = activeTeam.memberEmails?.[item.assignedTo] || "Ikke tildelt";
+              const name = email === "Ikke tildelt" ? email : email.split("@")[0];
+              const initials = name === "Ikke tildelt" ? "" : name.slice(0, 2).toUpperCase();
+              return (
             <tr
               key={item.id}
               className={selectedCase?.id === item.id ? "selected-row" : ""}
@@ -45,18 +50,19 @@ function CaseTable({ cases, hasCases, selectedCase, onSelect }) {
               </td>
               <td>
                 <span className="person">
-                  {item.person !== "Ikke tildelt" && (
-                    <span className="avatar">{item.initials}</span>
+                  {initials && (
+                    <span className="avatar">{initials}</span>
                   )}
-                  {item.person}
+                  {name}
                 </span>
               </td>
-              <td>{item.date}</td>
+              <td>{formatDate(item.createdAt)}</td>
               <td className="menu-dots">
                 <MoreHorizontal />
               </td>
             </tr>
-          ))}
+              );
+          })}
         </tbody>
       </table>
 

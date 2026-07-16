@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { ArrowRight, LockKeyhole, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import { auth } from "../config/firebase";
@@ -26,7 +26,8 @@ function Signup() {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      await sendEmailVerification(result.user);
     } catch {
       setError("Kunne ikke opprette bruker. E-posten kan være i bruk.");
     }
@@ -42,50 +43,17 @@ function Signup() {
 
       <section className="login-form-side">
         <div className="login-form-card">
-          <div className="mobile-logo">
-            <img src="/Logo.png" alt="Saksflyt" />
-          </div>
-
           <span className="welcome-label">NY BRUKER</span>
           <h2>Opprett en konto</h2>
-          <p className="login-intro">
-            Fyll inn opplysningene dine for å komme i gang.
-          </p>
+          <p className="login-intro">Du må bekrefte e-postadressen før du får tilgang.</p>
 
           <form onSubmit={handleSubmit}>
-            <AuthInput
-              label="E-post"
-              id="signup-email"
-              type="email"
-              placeholder="navn@eksempel.no"
-              value={email}
-              setValue={setEmail}
-              icon={<Mail />}
-            />
-            <AuthInput
-              label="Passord"
-              id="signup-password"
-              type="password"
-              placeholder="Minst 6 tegn"
-              value={password}
-              setValue={setPassword}
-              icon={<LockKeyhole />}
-            />
-            <AuthInput
-              label="Bekreft passord"
-              id="confirm-password"
-              type="password"
-              placeholder="Skriv passordet på nytt"
-              value={confirmPassword}
-              setValue={setConfirmPassword}
-              icon={<LockKeyhole />}
-            />
+            <AuthInput label="E-post" id="signup-email" type="email" value={email} setValue={setEmail} icon={<Mail />} />
+            <AuthInput label="Passord" id="signup-password" type="password" value={password} setValue={setPassword} icon={<LockKeyhole />} />
+            <AuthInput label="Bekreft passord" id="confirm-password" type="password" value={confirmPassword} setValue={setConfirmPassword} icon={<LockKeyhole />} />
 
             {error && <p className="error">{error}</p>}
-
-            <button className="login-submit" type="submit">
-              Opprett bruker <ArrowRight />
-            </button>
+            <button className="login-submit" type="submit">Opprett bruker <ArrowRight /></button>
           </form>
 
           <p className="login-signup-link">
@@ -97,20 +65,13 @@ function Signup() {
   );
 }
 
-function AuthInput({ label, id, type, placeholder, value, setValue, icon }) {
+function AuthInput({ label, id, type, value, setValue, icon }) {
   return (
     <div className="signup-field">
       <label htmlFor={id}>{label}</label>
       <div className="login-input">
         {icon}
-        <input
-          id={id}
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-          required
-        />
+        <input id={id} type={type} value={value} onChange={(event) => setValue(event.target.value)} required />
       </div>
     </div>
   );

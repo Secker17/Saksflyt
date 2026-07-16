@@ -11,13 +11,13 @@ function NewCase() {
   const { activeTeam } = useTeam();
   const categories = activeTeam?.settings?.categories || DEFAULT_CATEGORIES;
   const statuses = activeTeam?.settings?.statuses || DEFAULT_STATUSES;
+  const priorities = activeTeam?.settings?.priorities || PRIORITIES;
   const [searchParams] = useSearchParams();
   const teamId = searchParams.get("team");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState(categories[0]);
-  const [priority, setPriority] = useState("Middels");
+  const [priority, setPriority] = useState(priorities[1] || priorities[0]);
   const [description, setDescription] = useState("");
-  const [name, setName] = useState("");
   const [sent, setSent] = useState(false);
   const [caseId, setCaseId] = useState("");
   const [error, setError] = useState("");
@@ -42,13 +42,8 @@ function NewCase() {
       category,
       priority,
       description,
-      dueDate: "",
-      customerName: name,
-      customerEmail: "",
       status: statuses[0],
-      person: "Ikke tildelt",
-      initials: "--",
-      date: new Date().toLocaleDateString("no-NO"),
+      assignedTo: "",
     });
 
     setCaseId(id);
@@ -118,7 +113,7 @@ function NewCase() {
               label="Prioritet"
               value={priority}
               setValue={setPriority}
-              options={PRIORITIES}
+              options={priorities}
             />
           </div>
 
@@ -130,15 +125,6 @@ function NewCase() {
             rows="6"
             placeholder="Beskriv problemet og hva som allerede er prøvd"
           />
-
-          <Field
-            id="case-reporter"
-            label="Innmelder (valgfritt)"
-            value={name}
-            setValue={setName}
-            placeholder="Navn på personen som meldte inn saken"
-          />
-          <small className="form-help">Du trenger ikke å skrive inn e-post.</small>
 
           {error && <p className="error" role="alert">{error}</p>}
 

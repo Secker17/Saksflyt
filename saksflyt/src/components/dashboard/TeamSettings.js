@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { ListChecks, Settings2, Tags, X } from "lucide-react";
+import { Flag, ListChecks, Settings2, Tags, X } from "lucide-react";
 import { useTeam } from "../../context/TeamContext";
-import { DEFAULT_CATEGORIES, DEFAULT_STATUSES } from "../../config/caseOptions";
+import { DEFAULT_CATEGORIES, DEFAULT_STATUSES, PRIORITIES } from "../../config/caseOptions";
 
 function TeamSettings({ onClose }) {
   const { activeTeam, saveSettings } = useTeam();
@@ -11,22 +11,31 @@ function TeamSettings({ onClose }) {
   const [statuses, setStatuses] = useState(
     (activeTeam.settings?.statuses || DEFAULT_STATUSES).join("\n"),
   );
+  const [priorities, setPriorities] = useState(
+    (activeTeam.settings?.priorities || PRIORITIES).join("\n"),
+  );
   const [error, setError] = useState("");
   const categoryCount = categories.split("\n").filter((item) => item.trim()).length;
   const statusCount = statuses.split("\n").filter((item) => item.trim()).length;
+  const priorityCount = priorities.split("\n").filter((item) => item.trim()).length;
 
   async function handleSave(event) {
     event.preventDefault();
     const cleanCategories = categories.split("\n").map((item) => item.trim()).filter(Boolean);
     const cleanStatuses = statuses.split("\n").map((item) => item.trim()).filter(Boolean);
+    const cleanPriorities = priorities.split("\n").map((item) => item.trim()).filter(Boolean);
 
-    if (cleanCategories.length === 0 || cleanStatuses.length < 3) {
-      setError("Legg inn minst én kategori og tre statuser.");
+    if (cleanCategories.length === 0 || cleanStatuses.length < 3 || cleanPriorities.length === 0) {
+      setError("Legg inn minst én kategori, tre statuser og én prioritet.");
       return;
     }
 
     setError("");
-    await saveSettings({ categories: cleanCategories, statuses: cleanStatuses });
+    await saveSettings({
+      categories: cleanCategories,
+      statuses: cleanStatuses,
+      priorities: cleanPriorities,
+    });
     onClose();
   }
 
@@ -56,6 +65,16 @@ function TeamSettings({ onClose }) {
           <p>Brukes når en ny sak opprettes.</p>
           <textarea id="settings-categories" aria-label="Kategorier" rows="6" value={categories} onChange={(event) => setCategories(event.target.value)} />
           <small>Skriv én kategori per linje.</small>
+        </section>
+
+        <section className="settings-field">
+          <div className="settings-label">
+            <span><Flag /> Prioriteter</span>
+            <small>{priorityCount} valg</small>
+          </div>
+          <p>Brukes for å vise hvor viktig en sak er.</p>
+          <textarea id="settings-priorities" aria-label="Prioriteter" rows="4" value={priorities} onChange={(event) => setPriorities(event.target.value)} />
+          <small>Skriv én prioritet per linje.</small>
         </section>
 
         <section className="settings-field">

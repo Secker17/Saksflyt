@@ -250,6 +250,72 @@
   text-decoration: none;
 }
 
+.verify-page {
+  display: grid;
+  min-height: 100vh;
+  padding: 24px;
+  place-items: center;
+  background: linear-gradient(145deg, #eef4ff, #fcfdfe);
+}
+
+.verify-card {
+  width: min(460px, 100%);
+  padding: 42px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 18px 45px rgba(18, 47, 91, 0.12);
+  text-align: center;
+}
+
+.verify-icon {
+  display: grid;
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 20px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--light-blue);
+  color: var(--blue);
+}
+
+.verify-icon svg {
+  width: 28px;
+}
+
+.verify-card h1 {
+  margin: 9px 0;
+  color: var(--navy);
+}
+
+.verify-card > p:not(.welcome-label):not(.error):not(.login-message) {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.verify-secondary,
+.verify-logout {
+  width: 100%;
+  margin-top: 11px;
+  padding: 11px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  color: #56647a;
+}
+
+.verify-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 0;
+}
+
+.verify-logout svg {
+  width: 16px;
+}
+
 @media (max-width: 850px) {
   .login-page {
     grid-template-columns: 1fr;

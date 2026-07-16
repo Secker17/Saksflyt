@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  deleteField,
   doc,
   onSnapshot,
   orderBy,
@@ -35,6 +36,25 @@ export function createCase(teamId, newCase) {
 export function updateCase(teamId, caseId, changes) {
   const caseRef = doc(db, "teams", teamId, "cases", caseId);
   return updateDoc(caseRef, changes);
+}
+
+export function cleanupUnusedCaseFields(teamId, cases) {
+  const unusedFields = ["customerEmail", "customerName", "dueDate", "initials", "person", "date"];
+  const casesToClean = cases.filter((item) => (
+    unusedFields.some((field) => Object.hasOwn(item, field))
+  ));
+
+  return Promise.all(casesToClean.map((item) => {
+    const caseRef = doc(db, "teams", teamId, "cases", item.id);
+    return updateDoc(caseRef, {
+      customerEmail: deleteField(),
+      customerName: deleteField(),
+      dueDate: deleteField(),
+      initials: deleteField(),
+      person: deleteField(),
+      date: deleteField(),
+    });
+  }));
 }
 
 export function archiveCase(teamId, caseId) {
